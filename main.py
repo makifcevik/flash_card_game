@@ -1,6 +1,6 @@
 from tkinter import *
 import pandas as pd
-from random import randint, choice
+from random import randint
 
 # ---------------------- Constants ----------------------
 BACKGROUND_COLOR = "#B1DDC6"
@@ -8,8 +8,12 @@ FONT_SMALL = ("Ariel", 25, "italic")
 FONT_BIG = ("Ariel", 60, "bold")
 TIME = 3000
 
-# ---------------------- Variables ----------------------
-data = pd.read_csv("./data/formatted_words.txt")
+# ---------------------- Data ----------------------
+try:
+    data = pd.read_csv("./data/words_to_learn.csv")
+except FileNotFoundError:
+    data = pd.read_csv("data/formatted_words.csv")
+
 data_dict = data.to_dict()
 
 # ---------------------- Functions ----------------------
@@ -17,7 +21,8 @@ data_dict = data.to_dict()
 
 def flip_card(definition: str):
     canvas.itemconfig(item_image, image=img_card_back)
-    canvas.itemconfig(item_def, text=definition)
+    canvas.itemconfig(item_title, fill="white")
+    canvas.itemconfig(item_def, text=definition, fill="white")
 
 
 def count_down(time, definition: str):
@@ -43,8 +48,8 @@ def next_word():
     random_word = data_dict["Word"][random_index]
     word_def = format_def(data_dict["Definition"][random_index])
 
-    canvas.itemconfig(item_title, text=random_word)
-    canvas.itemconfig(item_def, text="")
+    canvas.itemconfig(item_title, text=random_word, fill="black")
+    canvas.itemconfig(item_def, text="", fill="black")
 
     count_down(TIME, word_def)
 

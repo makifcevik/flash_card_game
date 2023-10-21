@@ -11,7 +11,7 @@ with open("./data/words.txt") as data:
         formatted_string = f'{word},"{definition.strip()}"\n'
         formatted_list.append(formatted_string)
     print(formatted_list)
-with open("./data/formatted_words.txt", mode="a") as data:
+with open("data/formatted_words.csv", mode="a") as data:
     for line in formatted_list:
         data.write(line)
 
