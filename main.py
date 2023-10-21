@@ -2,13 +2,26 @@ from tkinter import *
 import pandas as pd
 from random import randint, choice
 
-# Constants
+# ---------------------- Constants ----------------------
 BACKGROUND_COLOR = "#B1DDC6"
 FONT_SMALL = ("Ariel", 25, "italic")
 FONT_BIG = ("Ariel", 60, "bold")
+TIME = 3000
 
+# ---------------------- Variables ----------------------
 data = pd.read_csv("./data/formatted_words.txt")
 data_dict = data.to_dict()
+
+# ---------------------- Functions ----------------------
+
+
+def flip_card(definition: str):
+    canvas.itemconfig(item_image, image=img_card_back)
+    canvas.itemconfig(item_def, text=definition)
+
+
+def count_down(time, definition: str):
+    window.after(time, flip_card, definition)
 
 
 def format_def(text: str):
@@ -25,15 +38,18 @@ def format_def(text: str):
 
 
 def next_word():
+    canvas.itemconfig(item_image, image=img_card_front)
     random_index = randint(0, len(data_dict["Word"]))
     random_word = data_dict["Word"][random_index]
     word_def = format_def(data_dict["Definition"][random_index])
 
     canvas.itemconfig(item_title, text=random_word)
-    canvas.itemconfig(item_def, text=word_def)
+    canvas.itemconfig(item_def, text="")
+
+    count_down(TIME, word_def)
 
 
-# ---------------------- UI
+# ---------------------- GUI ----------------------
 
 # Window Configuration
 window = Tk()
@@ -48,11 +64,14 @@ img_right = PhotoImage(file="./images/right.png")
 
 # Canvas Configuration
 canvas = Canvas(width=800, height=526, highlightthickness=0)
-canvas.create_image(0, 0, anchor=NW, image=img_card_front)
+item_image = canvas.create_image(0, 0, anchor=NW, image=img_card_front)
 item_title = canvas.create_text(400, 150, text="Title", font=FONT_BIG)
 item_def = canvas.create_text(400, 320, text="Definition Text Will Go Here \nAs It Should Be.", font=FONT_SMALL)
 canvas.config(bg=BACKGROUND_COLOR)
 canvas.grid(column=0, row=0, columnspan=2)
+
+# Initialize the card
+next_word()
 
 # Button Wrong
 button_wrong = Button(image=img_wrong, highlightthickness=0, borderwidth=0, command=next_word)
