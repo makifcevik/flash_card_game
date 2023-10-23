@@ -6,7 +6,7 @@ from random import randint
 BACKGROUND_COLOR = "#B1DDC6"
 FONT_SMALL = ("Ariel", 25, "italic")
 FONT_BIG = ("Ariel", 60, "bold")
-TIME = 3000
+TIME = 2500
 
 # ---------------------- Data ----------------------
 try:
@@ -15,6 +15,7 @@ except FileNotFoundError:
     data = pd.read_csv("data/formatted_words.csv")
 
 data_dict = data.to_dict()
+random_index = 0
 
 # ---------------------- Functions ----------------------
 
@@ -43,15 +44,25 @@ def format_def(text: str):
 
 
 def next_word():
+    global random_index
     canvas.itemconfig(item_image, image=img_card_front)
     random_index = randint(0, len(data_dict["Word"]))
     random_word = data_dict["Word"][random_index]
     word_def = format_def(data_dict["Definition"][random_index])
 
     canvas.itemconfig(item_title, text=random_word, fill="black")
-    canvas.itemconfig(item_def, text="", fill="black")
+    canvas.itemconfig(item_def, text="", fill="white")
 
     count_down(TIME, word_def)
+
+
+def known_word():
+    global random_index
+    del data_dict["Word"][random_index], data_dict["Definition"][random_index]
+    new_data = pd.DataFrame(data_dict)
+    new_data.to_csv("./data/words_to_learn.csv", index=False)
+    print(len(data_dict["Word"]))
+    next_word()
 
 
 # ---------------------- GUI ----------------------
@@ -83,7 +94,7 @@ button_wrong = Button(image=img_wrong, highlightthickness=0, borderwidth=0, comm
 button_wrong.grid(column=0, row=1)
 
 # Button Right
-button_right = Button(image=img_right, highlightthickness=0, borderwidth=0, command=next_word)
+button_right = Button(image=img_right, highlightthickness=0, borderwidth=0, command=known_word)
 button_right.grid(column=1, row=1)
 
 window.mainloop()
