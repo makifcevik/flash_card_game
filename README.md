@@ -29,7 +29,7 @@ pip install pandas
 Clone or download this repository to your local machine:
 
 ```bash
-git clone https://github.com/makifcevik/flash_card_game.git
+git clone https://github.com/makifcevik/flashcard-game.git
 cd flashcard-game
 ```
 
