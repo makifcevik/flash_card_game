@@ -36,7 +36,7 @@ cd flashcard-game
 Run the game:
 
 ```bash
-python flashcard_game.py
+python main.py
 ```
 
 ## How to Play
